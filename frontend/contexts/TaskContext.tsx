@@ -9,7 +9,7 @@ export interface Task {
   title: string
   description?: string
   status: "pending" | "in-progress" | "completed"
-  dueDate?: string
+  due_date?: string
   createdAt?: Date
   updatedAt?: Date
 }
@@ -32,7 +32,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   // First, let's add a base URL constant
-  const API_URL = 'http://localhost:4000'
+  const API_URL = 'http://localhost:4000/api'
 
   const fetchTasks = useCallback(async () => {
     const token = localStorage.getItem("token")
@@ -64,7 +64,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       const token = localStorage.getItem("token")
       console.log("Adding task:", task)
       // Use the consistent API_URL
-      const response = await axios.post(`${API_URL}/api/tasks`, task, {
+      const response = await axios.post(`${API_URL}/tasks`, task, {
         headers: { Authorization: `Bearer ${token}` },
       })
       console.log("Task added:", response.data)
@@ -84,7 +84,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     try {
       const token = localStorage.getItem("token")
       // Use the consistent API_URL
-      const response = await axios.put(`${API_URL}/api/tasks/${updatedTask.id}`, updatedTask, {
+      const response = await axios.put(`${API_URL}/tasks/${updatedTask.id}`, updatedTask, {
         headers: { Authorization: `Bearer ${token}` },
       })
       setTasks((prevTasks) => prevTasks.map((t) => (t.id === updatedTask.id ? response.data : t)))

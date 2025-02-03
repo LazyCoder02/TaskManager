@@ -1,37 +1,43 @@
+# docker-compose.yml
 version: '3.8'
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
-      - REACT_APP_API_URL=http://localhost:4000
+      - NEXT_PUBLIC_API_URL=http://backend:4000/api
     depends_on:
       - backend
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "4000:4000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     environment:
-      - DATABASE_URL=postgresql://user:user123:5432/TaskManager
+      - DATABASE_URL=postgresql://user:password@db:5432/TaskManager
+      - PORT=4000
+      - JWT_SECRET=0e7d2f77d0225290814dc7d204c9ae3d0cab3bcda0448ea45e2610c70c71c015
+      - NODE_ENV=development
     depends_on:
       - db
 
   db:
-    image: postgres:14
+    image: postgres
+    restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=taskdb
+      - POSTGRES_DB=TaskManager
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

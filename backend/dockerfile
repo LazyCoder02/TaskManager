@@ -1,15 +1,24 @@
+# api/Dockerfile
+# Use Node.js LTS
 FROM node:18-alpine
 
+# Set working directory
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
 
+# Copy project files
 COPY . .
 
-RUN npm run build
+# Build if needed (uncomment if you have a build step)
+#RUN npm run build
 
+# Expose port
 EXPOSE 4000
 
+# Start the application
 CMD ["npm", "start"]

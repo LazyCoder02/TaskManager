@@ -25,7 +25,7 @@ export default function CalendarPage() {
   }
 
   const getTasksForDate = (date: Date) => {
-    return tasks.filter((task) => task.dueDate && isSameDay(parseISO(task.dueDate), date))
+    return tasks.filter((task) => task.due_date && isSameDay(parseISO(task.due_date), date))
   }
 
   return (

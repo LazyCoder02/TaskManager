@@ -35,7 +35,7 @@ export default function UserDashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold dark:text-white">Welcome, {user.name}!</h1>
+      <h1 className="text-3xl font-bold dark:text-white">Welcome, {user.full_name}!</h1>
       <TaskStats
         tasksSet={taskStats.tasksSet}
         complete={taskStats.complete}

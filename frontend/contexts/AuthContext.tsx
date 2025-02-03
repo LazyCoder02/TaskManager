@@ -6,14 +6,14 @@ import { authService } from "@/services/authService"
 
 interface User{
     email: string,
-    name: string,
+    full_name: string,
 }
 
 interface AuthContextType {
   user: User | null
   loading: boolean
-  login: (email: string, password: string, name: string) => Promise<void>
-  register: (email: string, password: string, name: string) => Promise<void>
+  login: (email: string, password: string) => Promise<void>
+  register: (email: string, password: string, full_name: string) => Promise<void>
   logout: () => void
 }
 
@@ -51,8 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(response.user)
   }
 
-  const register = async (email: string, password: string, name: string) => {
-    const response = await authService.register(email, password, name)
+  const register = async (email: string, password: string, full_name: string) => {
+    const response = await authService.register(email, password, full_name)
     setUser(response.user)
   }
 

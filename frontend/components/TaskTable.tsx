@@ -17,7 +17,7 @@ export function TaskTable() {
     title: "",
     description: "",
     status: "pending",
-    dueDate: "",
+    due_date: "",
   })
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -36,7 +36,7 @@ export function TaskTable() {
           token: localStorage.getItem("token") ? "Token exists" : "No token"
         })
         await addTask(newTask)
-        setNewTask({ title: "", description: "", status: "pending", dueDate: "" })
+        setNewTask({ title: "", description: "", status: "pending", due_date: "" })
       }
       setIsDialogOpen(false)
     } catch (error) {
@@ -103,11 +103,11 @@ export function TaskTable() {
                 <Input
                   id="dueDate"
                   type="date"
-                  value={editingTask ? editingTask.dueDate : newTask.dueDate}
+                  value={editingTask ? editingTask.due_date : newTask.due_date}
                   onChange={(e) =>
                     editingTask
-                      ? setEditingTask({ ...editingTask, dueDate: e.target.value })
-                      : setNewTask({ ...newTask, dueDate: e.target.value })
+                      ? setEditingTask({ ...editingTask, due_date: e.target.value })
+                      : setNewTask({ ...newTask, due_date: e.target.value })
                   }
                 />
               </div>
@@ -168,7 +168,7 @@ export function TaskTable() {
                 <TableRow key={task.id}>
                   <TableCell className="font-medium">{task.title}</TableCell>
                   <TableCell>{task.description}</TableCell>
-                  <TableCell>{task.dueDate}</TableCell>
+                  <TableCell>{task.due_date}</TableCell>
                   <TableCell>
                     <span
                       className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${

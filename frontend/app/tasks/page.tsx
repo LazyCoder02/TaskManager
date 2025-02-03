@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { format, parseISO, isBefore } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,10 +9,22 @@ import { Search } from "lucide-react"
 import { useTasks } from "@/contexts/TaskContext"
 import { cn } from "@/lib/utils"
 import { Task } from "@/contexts/TaskContext"
+import { useAuth } from "@/contexts/AuthContext"
+import { useRouter } from 'next/navigation'
 
 export default function MyTasksPage() {
   const { tasks } = useTasks()
   const [searchTerm, setSearchTerm] = useState("")
+  const router = useRouter()
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      console.log('User is not here!');
+      router.push("/");
+    }
+  }, []);
+    
 
   const getTasksByDueDate = (tasks: typeof useTasks.prototype.tasks): typeof tasks => {
     return tasks.sort((a: any, b: any) => {
@@ -24,7 +36,6 @@ export default function MyTasksPage() {
     })
   }
   
-
   const filteredTasks = getTasksByDueDate(tasks).filter((task: Task) =>
     task.title.toLowerCase().includes(searchTerm.toLowerCase()),
   )
@@ -66,7 +77,7 @@ export default function MyTasksPage() {
                   <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <span className="mb-2 sm:mb-0 dark:text-white">{task.title}</span>
                     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                      Due: {task.dueDate ? format(parseISO(task.dueDate), "MMM d, yyyy") : "No due date"}
+                      Due: {task.due_date ? format(parseISO(task.due_date), "MMM d, yyyy") : "No due date"}
                     </span>
                   </CardTitle>
                 </CardHeader>
