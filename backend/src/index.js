@@ -1,28 +1,38 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const security = require('./middleware/security')
-const authRoutes = require('./routes/auth');
-const taskRoutes = require('./routes/tasks');
-const errorHandler = require('./utils/errorHandler');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const security = require("./middleware/security");
+const authRoutes = require("./routes/auth");
+const taskRoutes = require("./routes/tasks");
+const errorHandler = require("./utils/errorHandler");
+const { initializeDatabase } = require("./migrations/dbMigrations");
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: 'https://taskmanager-production-e5c1.up.railway.app',
-  credentials: true
-}));
-app.use(express.json());
+async function startServer() {
+  try {
+    // Initialize database
+    await initializeDatabase();
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/tasks', taskRoutes);
+    // Middleware
+    app.use(cors());
+    app.use(express.json());
 
-// Error handling
-app.use(errorHandler);
+    // Routes
+    app.use("/api/auth", authRoutes);
+    app.use("/api/tasks", taskRoutes);
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+    // Error handling
+    app.use(errorHandler);
+
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+}
+
+startServer();

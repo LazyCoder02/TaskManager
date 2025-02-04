@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
 );
 
 -- Tasks table
-CREATE TABLE tasks (
+CREATE TABLE IF NOT EXISTS tasks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE tasks (
 );
 
 -- Create index on user_id for better query performance
-CREATE INDEX idx_tasks_user_id ON tasks(user_id);
+CREATE INDEX IF NOT EXISTS idx_tasks_user_id ON tasks(user_id);
 
 -- Function to update timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -34,6 +34,10 @@ BEGIN
     RETURN NEW;
 END;
 $$ language 'plpgsql';
+
+-- Drop triggers if they exist
+DROP TRIGGER IF EXISTS update_users_updated_at ON users;
+DROP TRIGGER IF EXISTS update_tasks_updated_at ON tasks;
 
 -- Create triggers for updated_at
 CREATE TRIGGER update_users_updated_at
