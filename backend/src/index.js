@@ -9,7 +9,10 @@ const errorHandler = require('./utils/errorHandler');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://taskmanager-production-e5c1.up.railway.app',
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
