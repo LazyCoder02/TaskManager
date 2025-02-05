@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -8,14 +9,15 @@ const nextConfig = {
   },
   reactStrictMode: true,
   async rewrites() {
+    const apiUrl =
+      process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:4000/api/:path*", // Proxy to Backend
+        destination: `${apiUrl}/:path*`, // Proxy to Backend
       },
-    ]
+    ];
   },
-}
+};
 
-module.exports = nextConfig
-
+module.exports = nextConfig;
