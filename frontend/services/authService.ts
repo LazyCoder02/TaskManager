@@ -1,6 +1,8 @@
 import { User } from "lucide-react"
+import config from "@/contexts/config"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api"
+const API_URL = config.hostUrl
+console.log(API_URL)
 
 interface AuthResponse {
   user: User

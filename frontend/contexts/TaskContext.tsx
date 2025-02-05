@@ -3,6 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
 import axios from "axios"
+import config from "@/contexts/config"
 
 export interface Task {
   id?: number
@@ -32,7 +33,8 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null)
 
   // First, let's add a base URL constant
-  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api"
+  const API_URL = config.hostUrl
+  console.log(API_URL)
 
   const fetchTasks = useCallback(async () => {
     const token = localStorage.getItem("token")

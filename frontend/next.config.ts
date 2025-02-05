@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+import config from "@/contexts/config"
 
 const nextConfig = {
   eslint: {
@@ -10,7 +11,7 @@ const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
     const apiUrl =
-      process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
+      config.hostUrl;
     return [
       {
         source: "/api/:path*",
