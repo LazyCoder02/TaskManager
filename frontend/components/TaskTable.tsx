@@ -10,6 +10,7 @@ import { useTasks } from "@/contexts/TaskContext"
 import { Plus } from "lucide-react"
 import type { Task } from "@/contexts/TaskContext"
 import axios from "axios"
+import config from "@/contexts/config"
 
 export function TaskTable() {
   const { tasks = [], addTask, updateTask, deleteTask, isLoading } = useTasks()
@@ -32,7 +33,7 @@ export function TaskTable() {
       } else {
         console.log('Attempting to add new task:', newTask)
         console.log('Environment:', {
-          apiUrl: process.env.NEXT_PUBLIC_API_URL,
+          apiUrl: config.hostUrl,
           token: localStorage.getItem("token") ? "Token exists" : "No token"
         })
         await addTask(newTask)
